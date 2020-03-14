@@ -1,3 +1,6 @@
+### Approach
+For test I built a simple hellowolrd in nodejs and added a Dockerfile for building the docker image.
+I then generate a helm charts to help with deployment. The chart contains a kubernetes deployment,service,ingress and horizontal autoscaler for scaling the app when memory and cpu usage goes above 50% and uses the image generated from the helloworld app. All of the work is done against my personal kubernetes cluster which I run on linode.
 ### Setup Namespace for the app
 ```kubectl create namespace irembo```
 ### Create custom values file
@@ -98,3 +101,4 @@ REPOSITORY_NAME - the name of the repository for example irembonode
 REGISTRY_USERNAME - username of account used to push images
 REGISTRY_PASSWORD - password of account used to push images
 ```
+A more advanced setup should use https://www.gitops.tech/ and include a CD server like https://argoproj.github.io/argo-cd/
