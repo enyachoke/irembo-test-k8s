@@ -36,3 +36,55 @@ NOTES:
 ```
 The above example is live at https://irembotest.emmanuelnyachoke.com  my personal Kubernetes cluster deployed on linode.
 
+### Deploy Redis
+We will deloy redis using an already existing helm chart mantained by https://bitnami.com/
+```kubectl create ns irembo-redis```
+### Add bitnami charts repo
+```helm repo add bitnami https://charts.bitnami.com/bitnami```
+```helm repo update``
+``` helm install irembo-redis-release bitnami/redis --namespace irembo-redis``` 
+This will produce the following out put
+
+```
+NAME: irembo-redis-release
+LAST DEPLOYED: Sat Mar 14 23:29:53 2020
+NAMESPACE: irembo-redis
+STATUS: deployed
+REVISION: 1
+TEST SUITE: None
+NOTES:
+** Please be patient while the chart is being deployed **
+Redis can be accessed via port 6379 on the following DNS names from within your cluster:
+
+irembo-redis-release-master.irembo-redis.svc.cluster.local for read/write operations
+irembo-redis-release-slave.irembo-redis.svc.cluster.local for read-only operations
+
+
+To get your password run:
+
+    export REDIS_PASSWORD=$(kubectl get secret --namespace irembo-redis irembo-redis-release -o jsonpath="{.data.redis-password}" | base64 --decode)
+
+To connect to your Redis server:
+
+1. Run a Redis pod that you can use as a client:
+
+   kubectl run --namespace irembo-redis irembo-redis-release-client --rm --tty -i --restart='Never' \
+    --env REDIS_PASSWORD=$REDIS_PASSWORD \
+   --image docker.io/bitnami/redis:5.0.8-debian-10-r0 -- bash
+
+2. Connect using the Redis CLI:
+   redis-cli -h irembo-redis-release-master -a $REDIS_PASSWORD
+   redis-cli -h irembo-redis-release-slave -a $REDIS_PASSWORD
+
+To connect to your database from outside the cluster execute the following commands:
+
+    kubectl port-forward --namespace irembo-redis svc/irembo-redis-release-master 6379:6379 &
+    redis-cli -h 127.0.0.1 -p 6379 -a $REDIS_PASSWORD
+```
+
+Within the cluster redis can accessed at
+```irembo-redis-release-master.irembo-redis.svc.cluster.local```
+for read/write
+and
+```irembo-redis-release-slave.irembo-redis.svc.cluster.local```
+for readonly as shown in the notes
