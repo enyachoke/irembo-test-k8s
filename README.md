@@ -88,3 +88,13 @@ for read/write
 and
 ```irembo-redis-release-slave.irembo-redis.svc.cluster.local```
 for readonly as shown in the notes
+
+### CI/CD
+This repository contains a rudimentary CD/CD setup with travis which will build and deploy a new docker image whenever a tag is pushed the tag version should correspond with the chart version to ensure constencey. It assumes
+that the following envs are setup on travis
+```
+REGISTRY_ORGANISATION - for example irembo or a username like enyachoke
+REPOSITORY_NAME - the name of the repository for example irembonode
+REGISTRY_USERNAME - username of account used to push images
+REGISTRY_PASSWORD - password of account used to push images
+```

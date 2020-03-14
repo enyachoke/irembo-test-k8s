@@ -1,0 +1,10 @@
+language: node_js
+node_js:
+  - "10"
+env:
+  - NODE_ENV=travis
+deploy:
+  - provider: script
+    script: scripts/buildDockerImage.sh
+    on:
+      tags: true
