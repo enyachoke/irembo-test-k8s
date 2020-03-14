@@ -5,6 +5,6 @@ env:
   - NODE_ENV=travis
 deploy:
   - provider: script
-    script: scripts/buildDockerImage.sh
+    script: bash scripts/buildDockerImage.sh
     on:
       tags: true
