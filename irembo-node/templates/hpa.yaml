@@ -1,0 +1,22 @@
+kind: HorizontalPodAutoscaler 
+apiVersion: autoscaling/v2beta1 
+metadata:
+  name: {{ include "irembo-node.fullname" . }}
+  labels:
+    {{- include "irembo-node.labels" . | nindent 4 }}
+spec: 
+  maxReplicas: {{ .Values.hpa.maxReplicas }}
+  minReplicas: {{ .Values.hpa.minReplicas }}
+  scaleTargetRef: 
+    apiVersion: app/v1 
+    kind: Deployment 
+    name: {{ include "irembo-node.fullname" . }}
+  metrics: 
+  - type: Resource 
+    resource: 
+      name: cpu 
+      targetAverageUtilization: {{ .Values.hpa.cpuThreshold }}
+  - type: Resource 
+    resource: 
+      name: memory 
+      targetAverageUtilization: {{ .Values.hpa.memoryThreshold }}
